@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import type { Request, Response } from 'express';//verbatimModuleSyntax
 const app = express();
-const PORT = 3001; // Usamos 3001 (frontend 3000)
+const PORT = process.env.PORT || 3001; // Usamos 3001 (frontend 3000)
 
 // Middlewares
 app.use(cors()); 
