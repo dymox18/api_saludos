@@ -7,6 +7,12 @@ const PORT = process.env.PORT || 3001; // Usamos 3001 (frontend 3000)
 
 // Middlewares
 app.use(cors()); 
+app.use(express.json()); 
+
+// Agrega esto para probar por el navegador (GET)
+app.get("/", (req, res) => {
+  res.send("¡El servidor está vivo!");
+});
 app.use(bodyParser.json());
 
 // 🌟 Endpoint de Saludo 🌟
