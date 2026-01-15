@@ -3,42 +3,27 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import type { Request, Response } from 'express';//verbatimModuleSyntax
 const app = express();
-const PORT = process.env.PORT || 3001; // Usamos 3001 (frontend 3000)
 
-// Middlewares
+// 1. IMPORTANTE: CORS debe permitir el origen de Power Apps
 app.use(cors()); 
+
+// 2. VITAL: Sin esto, el POST siempre dirá "Cannot POST" o dará error 400
 app.use(express.json()); 
 
-// Agrega esto para probar por el navegador (GET)
 app.get("/", (req, res) => {
-  res.send("¡El servidor está vivo!");
-});
-app.use(bodyParser.json());
-
-// 🌟 Endpoint de Saludo 🌟
-// Espera un POST body: { name: "Usuario" }
-app.post('/api/saludo', (req: Request, res: Response) => {
-    // Definimos el tipo esperado para el body (opcional, pero buena práctica)
-    interface SaludoBody {
-        name: string;
-    }
-    const { name } = req.body as SaludoBody;
-
-    if (!name) {
-        return res.status(400).json({ 
-            message: "Error: Falta el parámetro 'name' en el cuerpo de la solicitud." 
-        });
-    }
-
-    // Lógica de respuesta de la API
-    const greetingMessage = `¡Hola, ${name}! Te saluda el backend de API_SALUDOS (Puerto ${PORT}).`;
-    
-    // Devolver el dato en el formato que el frontend espera
-    res.status(200).json({ 
-        message: greetingMessage 
-    });
+  res.send("¡El servidor está vivo y listo para Power Apps!");
 });
 
+app.post("/", (req, res) => {
+  const { name } = req.body;
+  res.json({ message: `Hola ${name}, bienvenido a la API de saludos!` });
+});
+
+const PORT = Number(process.env.PORT) || 10000;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
+});
 // Iniciar el servidor
 app.listen(PORT, () => {
     console.log(`🚀 API de Saludos corriendo en: http://localhost:${PORT}`);
